@@ -61,13 +61,13 @@ df.pop1 <- data.frame (pop = as.factor(morpho.data$Clas),
                        trait = as.numeric(morpho.data$PC1), 
                        who = as.factor(morpho.data$Who))
 
-# PST value for a fixed c/h2
+# PST value for a fixed c/h2. 
 boot.out <- boot(data = df.pop1, statistic = Pstformula, R = 100000, ch = 1, parallel = "snow") # PST for c/h2 = 1
 boot.out$t0
 boot.ci(boot.out, type = 'perc')$percent[[5]]
 boot.ci(boot.out, type = 'perc')$percent[[4]]
 
-# PST for each c/h2 of interest.
+# PST for each c/h2 of interest. In this example, c/h2 will take values from 0.01 to 2 each 0.02
 pstdf <- PstBrommer (data = df.pop1, boot.rep = 50, a = 0.01, b = 2, c = 0.02 )
 
 #########
@@ -96,6 +96,6 @@ abline (h = 0.086, col = "red", lwd =2) # mean
 abline (h = 0.088, col = "red", lty = "dashed", lwd = 1.5) # 95% CI
 abline (h = 0.083, col = "red", lty = "dashed", lwd = 1.5) # 5% CI
 
-ch2critic <- approxfun(pstdf$CIlow, pstdf$ch) # funcion para determinar ch2 critic
-ch2critic(0.088) # entre paréntesis colocar el upper CI de FST
+ch2critic <- approxfun(pstdf$CIlow, pstdf$ch) # creates a formula to determine c/h2 critic
+ch2critic(0.088) # Place between parenthesis the upper CI value of FST
 
